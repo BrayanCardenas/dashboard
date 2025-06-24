@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Font Awesome Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <title>My Finance</title>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <div class="navbar-container">
+          <a class="navbar-brand" href="#">
+            <i class="fas fa-chart-line"></i>My Finance
+          </a>
+          <button class="menu-toggle" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="navbar-links" id="navbarLinks">
+            <a href="#dashboard"
+              ><i class="fas fa-tachometer-alt"></i>Dashboard</a
+            >
+            <a href="#registro"><i class="fas fa-plus-circle"></i>Registro</a>
+            <a href="#graficos"><i class="fas fa-chart-pie"></i>Gráficos</a>
+            <a href="#historial"><i class="fas fa-history"></i>Historial</a>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <div id="flash-messages"></div>
+    <main style="padding-top: 80px; max-width: 1200px; margin: auto">
+      <!-- Sección Dashboard -->
+      <section id="dashboard" class="dashboard-section">
+        <h2 id="dashboard-title" class="dashboard-title">
+          <span class="visually-hidden">Panel principal financiero</span>
+          <i class="fas fa-tachometer-alt" style="margin-right: 10px"></i>
+          Dashboard Financiero
+        </h2>
+
+        <div class="summary-grid">
+          <div class="summary-card income-card" tabindex="0">
+            <i class="fas fa-arrow-up fa-2x"></i>
+            <h5>Ingresos</h5>
+            <h3 id="ingresos">$0.00</h3>
+          </div>
+          <div class="summary-card expense-card" tabindex="0">
+            <i class="fas fa-arrow-down fa-2x"></i>
+            <h5>Gastos</h5>
+            <h3 id="gastos">$0.00</h3>
+          </div>
+          <div class="summary-card debt-card" tabindex="0">
+            <i class="fas fa-credit-card fa-2x"></i>
+            <h5>Deudas</h5>
+            <h3 id="deudas">$0.00</h3>
+          </div>
+          <div class="summary-card balance-card" id="balance-card" tabindex="0">
+            <i class="fas fa-balance-scale fa-2x"></i>
+            <h5>Balance</h5>
+            <h3 id="balance">$0.00</h3>
+          </div>
+        </div>
+      </section>
+
+      <section id="registro">
+        <div class="form-container">
+          <div class="card">
+            <div class="card-header">
+              <h2 id="registro-title">
+                <i class="fas fa-plus-circle"></i>
+                Registrar Movimiento Financiero
+              </h2>
+            </div>
+            <div class="card-body">
+              <form id="form-registro" novalidate autocomplete="off">
+                <p id="registro-ayuda" class="visually-hidden">
+                  Complete el formulario para registrar un movimiento
+                  financiero. Los campos marcados con asterisco son
+                  obligatorios.
+                </p>
+                <div class="form-group">
+                  <label for="description">Descripción <span>*</span></label>
+                  <input
+                    type="text"
+                    id="description"
+                    name="description"
+                    placeholder="Ej: Compra de comestibles"
+                    required
+                    autocomplete="off"
+                  />
+                  <div class="invalid-feedback">
+                    Por favor ingrese una descripción válida.
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="amount">Monto <span>*</span></label>
+                  <div class="input-group">
+                    <span class="input-symbol">$</span>
+                    <input
+                      type="number"
+                      id="amount"
+                      name="amount"
+                      step="0.01"
+                      min="0.01"
+                      placeholder="0.00"
+                      required
+                      autocomplete="off"
+                      inputmode="decimal"
+                    />
+                  </div>
+                  <div class="invalid-feedback">
+                    Por favor ingrese un monto válido mayor a 0.
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="category">Tipo <span>*</span></label>
+                  <select id="category" name="category" required>
+                    <option value="">Seleccione un tipo</option>
+                    <option value="income">💰 Ingreso</option>
+                    <option value="expense">💳 Gasto</option>
+                    <option value="debt">📊 Deuda</option>
+                  </select>
+                  <div class="invalid-feedback">
+                    Por favor seleccione un tipo de transacción.
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="subcategory">Categoría</label>
+                  <select id="subcategory" name="subcategory">
+                    <option value="">Seleccione una categoría</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="transaction_date">Fecha</label>
+                  <input
+                    type="date"
+                    id="transaction_date"
+                    name="transaction_date"
+                    autocomplete="off"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <button type="submit" class="btn-submit">
+                    <i class="fas fa-save"></i> Guardar Transacción
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="graficos">
+        <div class="grafico-titulo">
+          <h2 id="graficos-title">
+            <i class="fas fa-chart-pie"></i> Análisis Gráfico
+          </h2>
+        </div>
+
+        <div class="graficos-grid">
+          <!-- Pie Chart - Gastos por categoría -->
+          <div class="grafico-card">
+            <div class="grafico-header">
+              <h5 id="gastos-categoria-title">
+                <i class="fas fa-chart-pie"></i> Gastos por Categoría
+              </h5>
+            </div>
+            <div class="grafico-body">
+              <canvas id="expensesChart" width="400" height="400"></canvas>
+            </div>
+          </div>
+
+          <!-- Bar Chart - Tendencia mensual -->
+          <div class="grafico-card">
+            <div class="grafico-header">
+              <h5 id="tendencia-mensual-title">
+                <i class="fas fa-chart-bar"></i> Tendencia Mensual
+              </h5>
+            </div>
+            <div class="grafico-body">
+              <canvas id="monthlyChart" width="400" height="400"></canvas>
+            </div>
+          </div>
+
+          <!-- Line Chart - Ingresos vs Gastos -->
+          <div class="grafico-card full-width">
+            <div class="grafico-header">
+              <h5 id="comparacion-title">
+                <i class="fas fa-chart-line"></i> Comparación Ingresos vs Gastos
+              </h5>
+            </div>
+            <div class="grafico-body">
+              <canvas id="comparisonChart" width="800" height="400"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="historial">
+        <div class="historial-container">
+          <div class="card">
+            <div class="card-header">
+              <h2 id="historial-title">
+                <i class="fas fa-history"></i> Historial de Transacciones
+              </h2>
+              <span id="cantidad-transacciones" class="badge-info">
+                0 transacciones recientes
+              </span>
+            </div>
+            <div class="card-body" id="contenedor-historial">
+              <!-- El historial de transacciones se llenará dinámicamente con JavaScript -->
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="footer">
+      <div class="footer-content">
+        <p>
+          &copy; 2025 <span lang="en">My Finance</span>. Todos los derechos
+          reservados.
+        </p>
+        <p class="footer-small">
+          Portal de Finanzas Personales &ndash; Gestión Inteligente de tu Dinero
+        </p>
+      </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
