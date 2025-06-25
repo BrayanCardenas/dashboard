@@ -137,6 +137,9 @@
                   <select id="subcategory" name="subcategory" required>
                     <option value="">Seleccione una categoría</option>
                   </select>
+                  <div class="invalid-feedback">
+                    Por favor seleccione una categoría.
+                  </div>
                 </div>
 
                 <div class="form-group">
@@ -167,11 +170,10 @@
           </h2>
         </div>
 
-        
         <div class="graficos-grid">
           <!-- Grafica Bara -->
           <div id="grafico-barras" class="grafico-barras"></div>
-  
+
           <!-- Grafica Pastel -->
           <div id="grafico-pastel" class="grafico-pastel"></div>
         </div>
@@ -179,8 +181,8 @@
 
       <section id="historial">
         <div class="historial-container">
-          <div class="card">
-            <div class="card-header">
+          <div class="historial-card">
+            <div class="historial-card-header">
               <h2 id="historial-title">
                 <i class="fas fa-history"></i> Historial de Transacciones
               </h2>
@@ -188,7 +190,7 @@
                 0 transacciones recientes
               </span>
             </div>
-            <div class="card-body" id="contenedor-historial">
+            <div class="historial-card-body" id="contenedor-historial">
               <!-- El historial de transacciones se llenará dinámicamente con JavaScript -->
             </div>
           </div>

@@ -178,7 +178,7 @@ function renderResumen(resumen) {
     <h5>Resumen por Categorías:</h5>
     <div class="row-resumen">
       <div>
-        <h6 style="color:green;">💰 Ingresos</h6>
+        <h6 class="resume-item" style="color:green;">💰 Ingresos</h6>
         <ul>
           ${Object.entries(resumen.income)
       .map(([cat, val]) => `<li>${cat}: $${val.toFixed(2)}</li>`)
@@ -186,7 +186,7 @@ function renderResumen(resumen) {
         </ul>
       </div>
       <div>
-        <h6 style="color:red;">💳 Gastos</h6>
+        <h6 class="resume-item " style="color:red;">💳 Gastos</h6>
         <ul>
           ${Object.entries(resumen.expense)
       .map(([cat, val]) => `<li>${cat}: $${val.toFixed(2)}</li>`)
@@ -194,7 +194,7 @@ function renderResumen(resumen) {
         </ul>
       </div>
       <div>
-        <h6 style="color:#ffc107;">📊 Estadísticas</h6>
+        <h6 class="resume-item" style="color:#ffc107">📊 Estadísticas</h6>
         <ul>
           <li>⬆️ Total Ingresos: $${resumen.totalIncome.toFixed(2)}</li>
           <li>⬇️ Total Gastos: $${resumen.totalExpenses.toFixed(2)}</li>
@@ -270,53 +270,9 @@ function onFormSubmit(e) {
 
   actualizarDashboard({ ingresos, gastos, deudas, balance });
 
-  // Resetear formulario
+  // Resetear formulario y subcategorías
   e.target.reset();
-  function onFormSubmit(e) {
-    e.preventDefault();
-
-    // Obtén los valores del formulario
-    const descripcion = document.getElementById('description').value.trim();
-    const monto = parseFloat(document.getElementById('amount').value);
-    const tipo = document.getElementById('category').value;
-    const subcategoria = document.getElementById('subcategory').value;
-    const fecha = document.getElementById('transaction_date').value;
-
-    // Validación
-    if (!descripcion || isNaN(monto) || monto <= 0 || !tipo || !subcategoria) {
-      mostrarMensaje('error', 'Por favor complete todos los campos obligatorios correctamente.');
-      return;
-    }
-
-
-
-    // Agrega la nueva transacción al arreglo
-    transacciones.push({
-      id: Date.now(),
-      description: descripcion,
-      amount: monto,
-      category: tipo,
-      subcategory: subcategoria,
-      date: fecha || new Date().toISOString().slice(0, 10)
-    });
-
-    mostrarMensaje('success', 'Transacción guardada con éxito.');
-
-    // Actualiza historial y dashboard
-    renderHistorial();
-
-    // Calcula los totales para el dashboard
-    const ingresos = transacciones.filter(t => t.category === 'income').reduce((acc, t) => acc + t.amount, 0);
-    const gastos = transacciones.filter(t => t.category === 'expense').reduce((acc, t) => acc + t.amount, 0);
-    const deudas = transacciones.filter(t => t.category === 'debt').reduce((acc, t) => acc + t.amount, 0);
-    const balance = ingresos - gastos - deudas;
-
-    actualizarDashboard({ ingresos, gastos, deudas, balance });
-
-    // Resetear formulario y subcategorías
-    e.target.reset();
-    actualizarSubcategorias();
-  }
+  actualizarSubcategorias();
 }
 
 function renderGraficoBarras({ ingresos, gastos, deudas }) {
@@ -392,34 +348,39 @@ function renderGraficoPastel({ ingresos, gastos, deudas }) {
 }
 // Inicialización centralizada al cargar la página
 document.addEventListener('DOMContentLoaded', () => {
-  // Dashboard inicial
-  const datos = {
-    ingresos: 0,
-    gastos: 0,
-    deudas: 0,
-    balance: 0
-  };
-  actualizarDashboard(datos);
-
-  // Mensajes de ejemplo
-  // mostrarMensaje('success', '¡Operación realizada correctamente!');
-  // mostrarMensaje('error', 'Ocurrió un error al guardar los datos.');
-
-  // Historial
-  renderHistorial();
-
-  // Formulario
   const form = document.getElementById('form-registro');
   if (form) {
-    form.addEventListener('submit', onFormSubmit);
+    form.addEventListener('submit', function (e) {
+      // Si el formulario es inválido, muestra los mensajes y NO ejecuta el guardado
+      if (!form.checkValidity()) {
+        e.preventDefault();
+        form.classList.add('was-validated');
+        mostrarMensaje('error', 'Por favor complete todos los campos obligatorios correctamente.');
+        return;
+      }
+      // Si es válido, ejecuta el guardado
+      e.preventDefault();
+      form.classList.remove('was-validated'); // Limpia validación previa
+      onFormSubmit(e);
+    });
   }
 
   const categoriaSelect = document.getElementById('category');
   if (categoriaSelect) {
     categoriaSelect.addEventListener('change', actualizarSubcategorias);
-    // Inicializa subcategorías si ya hay un valor seleccionado
     actualizarSubcategorias();
   }
+
+  // Dashboard inicial
+  actualizarDashboard({
+    ingresos: 0,
+    gastos: 0,
+    deudas: 0,
+    balance: 0
+  });
+
+  // Historial
+  renderHistorial();
 });
 
 

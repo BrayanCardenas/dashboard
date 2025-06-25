@@ -31,20 +31,20 @@ nav {
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  max-width: 1200px;
+  max-width: 75em;
   margin: auto;
-  padding: 10px 20px;
+  padding: 1.25em;
 }
 
 .navbar-brand {
   color: white;
-  font-size: 20px;
+  font-size: 1.25em;
   font-weight: bold;
   text-decoration: none;
 }
 
 .navbar-brand i {
-  margin-right: 8px;
+  margin-right: 0.5em;
 }
 
 .menu-toggle {
@@ -53,22 +53,22 @@ nav {
   border: none;
   color: white;
   cursor: pointer;
-  font-size: 24px;
+  font-size: 1.5em;
 }
 
 .navbar-links {
   display: flex;
-  gap: 20px;
+  gap: 1.25em;
 }
 
 .navbar-links a {
   color: white;
-  font-size: 16px;
+  font-size: 1em;
   text-decoration: none;
 }
 
 .navbar-links a i {
-  margin-right: 6px;
+  margin-right: 0.375em;
 }
 
 /* Responsive */
@@ -81,13 +81,13 @@ nav {
     flex-direction: column;
     width: 100%;
     background-color: var(--verde);
-    margin-top: 10px;
+    margin-top: 0.625em;
   }
   .navbar-links.active {
     display: flex;
   }
   .navbar-links a {
-    padding: 10px;
+    padding: 0.625em;
     border-top: 1px solid rgba(255, 255, 255, 0.2);
   }
 }
@@ -97,7 +97,7 @@ nav {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-top: 80px;
+  padding-top: 5em;
   max-width: 65em;
   margin: auto;
 }
@@ -111,15 +111,15 @@ nav {
   display: grid;
   grid-auto-flow: column; /* Hace que el grid fluya en columnas, no en filas */
   grid-auto-columns: minmax(13.75em, 1fr);
-  gap: 20px;
+  gap: 1.25em;
   justify-content: center;
 }
 
 .summary-card {
   background: #f4f4f4;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  padding: 20px;
+  border-radius: 1em;
+  box-shadow: 0 2px 0.375em rgba(0, 0, 0, 0.1);
+  padding: 1.25em;
   text-align: center;
 }
 
@@ -147,7 +147,7 @@ nav {
 .footer {
   background-color: #222;
   color: #f4f4f4;
-  padding: 20px 0;
+  padding: 2.25em 0;
   text-align: center;
 }
 
@@ -157,51 +157,70 @@ nav {
 }
 
 .footer-content {
-  max-width: 1200px;
+  max-width: 75em;
   margin: auto;
 }
 
 /*Registro (Formulario)*/
 #registro {
-  max-width: 800px;
-  margin: 40px auto;
-  padding: 0 20px;
+  max-width: 50em;
+  margin: 2.25em auto;
+  padding: 0 1.25em;
 }
 
 .form-container {
   background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  padding: 30px;
+  border-radius: 1.3em;
+  box-shadow: 0 2px 1.6em rgba(0, 0, 0, 0.1);
+  padding: 1.875em;
 }
 
-.card-header {
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+}
+.card-header,
+.historial-card-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
+  color: var(--verde);
 }
 
+.historial-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25em;
+  border-radius: 1em;
+  box-shadow: 0 2px 0.375em rgba(0, 0, 0, 0.1);
+  padding: 1.25em;
+}
+
+.historial-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25em;
+}
 .card-header h3,
 .card-header h2,
 .card-header h5 {
   color: var(--verde);
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 0.5em;
   font-size: 1.5rem;
-  margin-bottom: 20px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
+  margin-bottom: 1.25em;
 }
 
 label {
   font-weight: 600;
-  margin-bottom: 6px;
+  margin-bottom: 0.375em;
 }
 
 input[type="text"],
@@ -209,9 +228,9 @@ input[type="number"],
 input[type="date"],
 select {
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: 0.8em;
   font-size: 1rem;
-  padding: 10px;
+  padding: 0.8em;
   transition: border-color 0.3s;
 }
 
@@ -230,25 +249,25 @@ select:focus {
   background-color: #e9ecef;
   border: 1px solid #ccc;
   border-right: none;
-  border-radius: 6px 0 0 6px;
-  padding: 10px 12px;
+  border-radius: 0.8em 0 0 0.8em;
+  padding: 0.8em 1em;
 }
 
 .input-group input {
   flex: 1;
   border-left: none;
-  border-radius: 0 6px 6px 0;
+  border-radius: 0 0.8em 0.8em 0;
 }
 
 .invalid-feedback {
   color: var(--rojo);
   display: none;
   font-size: 0.85rem;
-  margin-top: 4px;
+  margin-top: 0.25em;
 }
 
-input:invalid + .invalid-feedback,
-select:invalid + .invalid-feedback {
+.was-validated input:invalid + .invalid-feedback,
+.was-validated select:invalid + .invalid-feedback {
   display: block;
 }
 
@@ -257,14 +276,15 @@ select:invalid + .invalid-feedback {
 .btn-eliminar {
   align-items: center;
   border: none;
-  border-radius: 6px;
+  border-radius: 0.8em;
   cursor: pointer;
   display: flex;
   font-size: 1rem;
-  gap: 10px;
+  gap: 0.6em;
   justify-content: center;
-  padding: 12px;
+  padding: 0.8em;
   transition: background-color 0.3s;
+  text-decoration: none;
 }
 
 .btn-submit {
@@ -282,43 +302,45 @@ select:invalid + .invalid-feedback {
   border: 1px solid var(--rojo);
   color: var(--rojo);
   font-size: 0.9rem;
-  margin-top: 5px;
-  padding: 4px 8px;
+  margin-top: 0.312em;
+  padding: 0.25em 0.5em;
   width: auto;
 }
 
 /*Badges*/
 .badge-info,
 .badge-categoria {
-  border-radius: 20px;
+  border-radius: 1.25em;
   color: white;
   font-size: 0.9rem;
-  padding: 6px 12px;
+  padding: 0.375em 1.3em;
 }
 
 .badge-info {
-  background-color: var(--azul);
+  border-radius: 1px solid var(--gris);
+  color: #000;
+  font-size: 1em;
 }
 
 .badge-categoria {
   background-color: var(--gris);
-  border-radius: 12px;
+  border-radius: 1.3em;
   font-size: 0.75rem;
-  margin-left: 5px;
-  padding: 2px 8px;
+  margin-left: 0.312em;
+  padding: 2px 0.5em;
 }
 
 /*Historial*/
 #historial {
   width: 58.75em;
-  margin: 40px auto;
+  margin: 2.25em auto;
 }
 
 .historial-container .card {
   background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 20px;
+  border-radius: 1.3em;
+  box-shadow: 0 2px 0.5em rgba(0, 0, 0, 0.1);
+  padding: 1.25em;
 }
 
 .lista-transacciones {
@@ -331,7 +353,7 @@ select:invalid + .invalid-feedback {
   border-bottom: 1px solid #ddd;
   display: flex;
   justify-content: space-between;
-  padding: 15px 10px;
+  padding: 0.93em 1.6em;
 }
 
 .item-transaccion .info {
@@ -345,17 +367,18 @@ select:invalid + .invalid-feedback {
 .item-transaccion small {
   color: #666;
   display: block;
-  margin-top: 4px;
+  margin-top: 0.25em;
 }
 
 /*Montos*/
 .monto {
-  border-radius: 20px;
+  border-radius: 1.25em;
   font-weight: bold;
-  padding: 6px 10px;
+  padding: 0.375em 1.6em;
 }
 
 .monto.income {
+  max-width: max-content;
   background-color: #d4edda;
   color: #155724;
 }
@@ -373,9 +396,9 @@ select:invalid + .invalid-feedback {
   color: var(--verde);
   display: flex;
   font-size: 1.8rem;
-  gap: 10px;
+  gap: 0.38em;
   justify-content: center;
-  margin-bottom: 30px;
+  margin-bottom: 1.87;
   text-align: center;
 }
 
@@ -388,9 +411,9 @@ select:invalid + .invalid-feedback {
 
 .grafico-card {
   background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 20px;
+  border-radius: 1.3em;
+  box-shadow: 0 2px 0.5em rgba(0, 0, 0, 0.1);
+  padding: 1.25em;
 }
 
 .grafico-card.full-width {
@@ -402,8 +425,8 @@ select:invalid + .invalid-feedback {
   color: #333;
   display: flex;
   font-size: 1.2rem;
-  gap: 8px;
-  margin-bottom: 15px;
+  gap: 0.5em;
+  margin-bottom: 0.93em;
 }
 
 .grafico-body {
@@ -414,11 +437,12 @@ select:invalid + .invalid-feedback {
 
 /*Resumen adicional*/
 .card-resumen {
-  margin-top: 30px;
+  margin-top: 1.87em;
 }
 
 .card-resumen h5 {
-  margin-bottom: 10px;
+  font-size: 1em;
+  margin-bottom: 0.8em;
 }
 
 .card-resumen ul {
@@ -428,7 +452,7 @@ select:invalid + .invalid-feedback {
 
 .card-resumen li {
   font-size: 0.95rem;
-  margin-bottom: 6px;
+  margin-bottom: 0.375em;
 }
 
 /*Accesibilidad*/
@@ -443,10 +467,9 @@ select:invalid + .invalid-feedback {
   border: 0;
 }
 
-
 #flash-messages {
   position: fixed;
-  top: 80px; /* Ajusta según la altura de tu navbar */
+  top: 5em; /* Ajusta según la altura de tu navbar */
   left: 0;
   width: 100%;
   z-index: 2000;
@@ -458,16 +481,16 @@ select:invalid + .invalid-feedback {
 }
 .flash-message {
   pointer-events: auto;
-  margin-bottom: 10px;
+  margin-bottom: 1.6em;
   padding: 1em;
-  border-radius: 6px;
+  border-radius: 0.375em;
   font-weight: bold;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  min-width: 300px;
+  min-width: 18.75em;
   max-width: 90vw;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 0.5em rgba(0, 0, 0, 0.08);
 }
 .flash-message.success {
   background-color: #d4edda;
@@ -493,9 +516,14 @@ select:invalid + .invalid-feedback {
 
 .text-center {
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
 }
 .text-end {
-  text-align: end;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .text-muted {
   color: #888;
@@ -505,36 +533,42 @@ select:invalid + .invalid-feedback {
   gap: 2em;
   justify-content: space-between;
   flex-wrap: wrap;
+  font-size: 1em;
+}
+
+.resume-item {
+  font-size: 1em;
+  margin-bottom: .5em;
 }
 
 /* Grafica Barra */
 .grafico-barras {
   display: flex;
   justify-content: space-around;
-  
+
   align-items: flex-end;
   gap: 1.5em;
   height: 10em; /* Más compacto */
   margin: 1.5em auto;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
+  box-shadow: 0 2px 0.5em rgba(0, 0, 0, 0.1);
+  border-radius: 1.3em;
   width: 18em;
   padding: 1em 0.5em;
 }
 .barra {
-  width: 40px;
-  min-height: 20px;
+  width: 2.25em;
+  min-height: 1.25em;
   background: #4caf50;
   color: #000000;
   text-align: center;
-  border-radius: 8px 8px 0 0;
+  border-radius: 0.5em 0.5em 0 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
   font-size: 0.95em;
   font-weight: bold;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 2px 0.375em rgba(0, 0, 0, 0.07);
   transition: height 0.4s;
   padding-bottom: 0.5em;
 }
@@ -557,15 +591,15 @@ select:invalid + .invalid-feedback {
 
 /* Grafica Pastel */
 .grafico-pastel {
-  width: 180px;
-  height: 180px;
+  width: 11.25em;
+  height: 11.25em;
   border-radius: 50%;
   margin: 2em auto;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 0.5em rgba(0, 0, 0, 0.08);
 }
 .grafico-pastel-label {
   position: absolute;
