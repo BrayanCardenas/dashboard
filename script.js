@@ -380,10 +380,10 @@ function onFormSubmit(e) {
 document.addEventListener('DOMContentLoaded', () => {
   // Dashboard inicial
   const datos = {
-    ingresos: 2500.75,
-    gastos: 1350.50,
-    deudas: 600.00,
-    balance: 550.25
+    ingresos: 0,
+    gastos: 0,
+    deudas: 0,
+    balance: 0
   };
   actualizarDashboard(datos);
 
