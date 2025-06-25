@@ -20,6 +20,10 @@ function actualizarDashboard({ ingresos, gastos, deudas, balance }) {
     balanceCard.classList.add('negative');
     balanceCard.classList.remove('positive');
   }
+
+  // Llama al gráfico de barras
+  renderGraficoBarras({ ingresos, gastos, deudas });
+  renderGraficoPastel({ ingresos, gastos, deudas });
 }
 
 // Muestra mensajes de éxito o error en pantalla
@@ -208,6 +212,14 @@ function eliminarTransaccion(id) {
   if (!confirm("¿Está seguro de eliminar esta transacción?")) return;
   transacciones = transacciones.filter((t) => t.id !== id);
   renderHistorial();
+
+  // Calcula los totales para el dashboard
+  const ingresos = transacciones.filter(t => t.category === 'income').reduce((acc, t) => acc + t.amount, 0);
+  const gastos = transacciones.filter(t => t.category === 'expense').reduce((acc, t) => acc + t.amount, 0);
+  const deudas = transacciones.filter(t => t.category === 'debt').reduce((acc, t) => acc + t.amount, 0);
+  const balance = ingresos - gastos - deudas;
+
+  actualizarDashboard({ ingresos, gastos, deudas, balance });
 }
 
 // Formatea la fecha a dd/mm/yyyy
@@ -216,77 +228,6 @@ function formatearFecha(fecha) {
   return `${String(d.getDate()).padStart(2, "0")}/${String(
     d.getMonth() + 1
   ).padStart(2, "0")}/${d.getFullYear()}`;
-}
-
-// Inicializa los gráficos con Chart.js
-function inicializarGraficos() {
-  // Pie Chart - Gastos por Categoría
-  new Chart(document.getElementById('expensesChart'), {
-    type: 'pie',
-    data: {
-      labels: ['Alimentación', 'Transporte', 'Servicios', 'Otros'],
-      datasets: [{
-        data: [300, 200, 150, 100],
-        backgroundColor: ['#f87171', '#fbbf24', '#34d399', '#60a5fa'],
-      }]
-    },
-    options: {
-      responsive: true
-    }
-  });
-
-  // Bar Chart - Tendencia mensual
-  new Chart(document.getElementById('monthlyChart'), {
-    type: 'bar',
-    data: {
-      labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
-      datasets: [{
-        label: 'Gastos',
-        data: [500, 450, 400, 600, 550, 580],
-        backgroundColor: '#60a5fa'
-      }]
-    },
-    options: {
-      responsive: true,
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
-    }
-  });
-
-  // Line Chart - Ingresos vs Gastos
-  new Chart(document.getElementById('comparisonChart'), {
-    type: 'line',
-    data: {
-      labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
-      datasets: [
-        {
-          label: 'Ingresos',
-          data: [1000, 950, 1050, 1000, 980, 1100],
-          borderColor: '#10b981',
-          backgroundColor: 'rgba(16, 185, 129, 0.2)',
-          tension: 0.3
-        },
-        {
-          label: 'Gastos',
-          data: [500, 450, 400, 600, 550, 580],
-          borderColor: '#ef4444',
-          backgroundColor: 'rgba(239, 68, 68, 0.2)',
-          tension: 0.3
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
-    }
-  });
 }
 
 // Maneja el envío del formulario de registro de transacciones
@@ -332,50 +273,123 @@ function onFormSubmit(e) {
   // Resetear formulario
   e.target.reset();
   function onFormSubmit(e) {
-  e.preventDefault();
+    e.preventDefault();
 
-  // Obtén los valores del formulario
-  const descripcion = document.getElementById('description').value.trim();
-  const monto = parseFloat(document.getElementById('amount').value);
-  const tipo = document.getElementById('category').value;
-  const subcategoria = document.getElementById('subcategory').value;
-  const fecha = document.getElementById('transaction_date').value;
+    // Obtén los valores del formulario
+    const descripcion = document.getElementById('description').value.trim();
+    const monto = parseFloat(document.getElementById('amount').value);
+    const tipo = document.getElementById('category').value;
+    const subcategoria = document.getElementById('subcategory').value;
+    const fecha = document.getElementById('transaction_date').value;
 
-  // Validación
-  if (!descripcion || isNaN(monto) || monto <= 0 || !tipo || !subcategoria) {
-    mostrarMensaje('error', 'Por favor complete todos los campos obligatorios correctamente.');
-    return;
+    // Validación
+    if (!descripcion || isNaN(monto) || monto <= 0 || !tipo || !subcategoria) {
+      mostrarMensaje('error', 'Por favor complete todos los campos obligatorios correctamente.');
+      return;
+    }
+
+
+
+    // Agrega la nueva transacción al arreglo
+    transacciones.push({
+      id: Date.now(),
+      description: descripcion,
+      amount: monto,
+      category: tipo,
+      subcategory: subcategoria,
+      date: fecha || new Date().toISOString().slice(0, 10)
+    });
+
+    mostrarMensaje('success', 'Transacción guardada con éxito.');
+
+    // Actualiza historial y dashboard
+    renderHistorial();
+
+    // Calcula los totales para el dashboard
+    const ingresos = transacciones.filter(t => t.category === 'income').reduce((acc, t) => acc + t.amount, 0);
+    const gastos = transacciones.filter(t => t.category === 'expense').reduce((acc, t) => acc + t.amount, 0);
+    const deudas = transacciones.filter(t => t.category === 'debt').reduce((acc, t) => acc + t.amount, 0);
+    const balance = ingresos - gastos - deudas;
+
+    actualizarDashboard({ ingresos, gastos, deudas, balance });
+
+    // Resetear formulario y subcategorías
+    e.target.reset();
+    actualizarSubcategorias();
+  }
+}
+
+function renderGraficoBarras({ ingresos, gastos, deudas }) {
+  const contenedor = document.getElementById('grafico-barras');
+  // Encuentra el valor máximo para escalar las barras
+  const max = Math.max(ingresos, gastos, deudas, 1);
+  if (!contenedor) return;
+  contenedor.innerHTML = `
+    <div class="barra ingresos" style="height:${(ingresos / max) * 100}%">
+      $${ingresos.toFixed(2)}
+      <div class="barra-label">Ingresos</div>
+    </div>
+    <div class="barra gastos" style="height:${(gastos / max) * 100}%">
+      $${gastos.toFixed(2)}
+      <div class="barra-label">Gastos</div>
+    </div>
+    <div class="barra deudas" style="height:${(deudas / max) * 100}%">
+      $${deudas.toFixed(2)}
+      <div class="barra-label">Deudas</div>
+    </div>
+  `;
+}
+
+function renderGraficoPastel({ ingresos, gastos, deudas }) {
+  const pastel = document.getElementById('grafico-pastel');
+  const total = ingresos + gastos + deudas;
+
+  if (!pastel) return;
+
+  // Si no hay datos, todo gris
+  if (total === 0) {
+    pastel.style.background = "#bdbdbd";
+  } else if (
+    (ingresos > 0 && gastos === 0 && deudas === 0) ||
+    (gastos > 0 && ingresos === 0 && deudas === 0) ||
+    (deudas > 0 && ingresos === 0 && gastos === 0)
+  ) {
+    // Solo hay un valor, llena todo el círculo con ese color
+    let color = "#4caf50";
+    if (gastos > 0) color = "#ef4444";
+    if (deudas > 0) color = "#ffc107";
+    pastel.style.background = color;
+  } else {
+    // Hay más de un valor, distribuye proporcionalmente
+    const ingresosPorc = (ingresos / total) * 100;
+    const gastosPorc = (gastos / total) * 100;
+    const deudasPorc = (deudas / total) * 100;
+
+    // Ángulos para cada segmento
+    const sep = 2;
+    const ingresosDeg = ingresosPorc * 3.6;
+    const gastosDeg = gastosPorc * 3.6;
+    const deudasDeg = deudasPorc * 3.6;
+
+    pastel.style.background = `
+      conic-gradient(
+        #4caf50 0 ${ingresosDeg - sep / 2}deg,
+        #fff ${ingresosDeg - sep / 2}deg ${ingresosDeg + sep / 2}deg,
+        #ef4444 ${ingresosDeg + sep / 2}deg ${ingresosDeg + gastosDeg - sep / 2}deg,
+        #fff ${ingresosDeg + gastosDeg - sep / 2}deg ${ingresosDeg + gastosDeg + sep / 2}deg,
+        #ffc107 ${ingresosDeg + gastosDeg + sep / 2}deg 360deg
+      )
+    `;
   }
 
-  // Agrega la nueva transacción al arreglo
-  transacciones.push({
-    id: Date.now(),
-    description: descripcion,
-    amount: monto,
-    category: tipo,
-    subcategory: subcategoria,
-    date: fecha || new Date().toISOString().slice(0, 10)
-  });
-
-  mostrarMensaje('success', 'Transacción guardada con éxito.');
-
-  // Actualiza historial y dashboard
-  renderHistorial();
-
-  // Calcula los totales para el dashboard
-  const ingresos = transacciones.filter(t => t.category === 'income').reduce((acc, t) => acc + t.amount, 0);
-  const gastos = transacciones.filter(t => t.category === 'expense').reduce((acc, t) => acc + t.amount, 0);
-  const deudas = transacciones.filter(t => t.category === 'debt').reduce((acc, t) => acc + t.amount, 0);
-  const balance = ingresos - gastos - deudas;
-
-  actualizarDashboard({ ingresos, gastos, deudas, balance });
-
-  // Resetear formulario y subcategorías
-  e.target.reset();
-  actualizarSubcategorias();
+  pastel.innerHTML = `
+    <div class="grafico-pastel-label">
+      <span style="color:#4caf50;">●</span> Ingresos<br>
+      <span style="color:#ef4444;">●</span> Gastos<br>
+      <span style="color:#ffc107;">●</span> Deudas
+    </div>
+  `;
 }
-}
-
 // Inicialización centralizada al cargar la página
 document.addEventListener('DOMContentLoaded', () => {
   // Dashboard inicial
@@ -393,9 +407,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Historial
   renderHistorial();
-
-  // Gráficos
-  inicializarGraficos();
 
   // Formulario
   const form = document.getElementById('form-registro');

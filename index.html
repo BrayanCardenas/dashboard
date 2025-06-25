@@ -34,7 +34,7 @@
     </header>
 
     <div id="flash-messages"></div>
-    <main style="padding-top: 80px; max-width: 1200px; margin: auto">
+    <main class="main-content">
       <!-- Sección Dashboard -->
       <section id="dashboard" class="dashboard-section">
         <h2 id="dashboard-title" class="dashboard-title">
@@ -167,42 +167,13 @@
           </h2>
         </div>
 
+        
         <div class="graficos-grid">
-          <!-- Pie Chart - Gastos por categoría -->
-          <div class="grafico-card">
-            <div class="grafico-header">
-              <h5 id="gastos-categoria-title">
-                <i class="fas fa-chart-pie"></i> Gastos por Categoría
-              </h5>
-            </div>
-            <div class="grafico-body">
-              <canvas id="expensesChart" width="400" height="400"></canvas>
-            </div>
-          </div>
-
-          <!-- Bar Chart - Tendencia mensual -->
-          <div class="grafico-card">
-            <div class="grafico-header">
-              <h5 id="tendencia-mensual-title">
-                <i class="fas fa-chart-bar"></i> Tendencia Mensual
-              </h5>
-            </div>
-            <div class="grafico-body">
-              <canvas id="monthlyChart" width="400" height="400"></canvas>
-            </div>
-          </div>
-
-          <!-- Line Chart - Ingresos vs Gastos -->
-          <div class="grafico-card full-width">
-            <div class="grafico-header">
-              <h5 id="comparacion-title">
-                <i class="fas fa-chart-line"></i> Comparación Ingresos vs Gastos
-              </h5>
-            </div>
-            <div class="grafico-body">
-              <canvas id="comparisonChart" width="800" height="400"></canvas>
-            </div>
-          </div>
+          <!-- Grafica Bara -->
+          <div id="grafico-barras" class="grafico-barras"></div>
+  
+          <!-- Grafica Pastel -->
+          <div id="grafico-pastel" class="grafico-pastel"></div>
         </div>
       </section>
 

@@ -92,15 +92,27 @@ nav {
   }
 }
 
+.main-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 80px;
+  max-width: 65em;
+  margin: auto;
+}
+
 /*Dashboard - Resumen*/
-.dashboard-title{
+.dashboard-title {
   text-align: center;
   margin-bottom: 1em;
 }
 .summary-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-auto-flow: column; /* Hace que el grid fluya en columnas, no en filas */
+  grid-auto-columns: minmax(13.75em, 1fr);
   gap: 20px;
+  justify-content: center;
 }
 
 .summary-card {
@@ -298,9 +310,8 @@ select:invalid + .invalid-feedback {
 
 /*Historial*/
 #historial {
-  max-width: 1000px;
+  width: 58.75em;
   margin: 40px auto;
-  padding: 0 20px;
 }
 
 .historial-container .card {
@@ -357,13 +368,6 @@ select:invalid + .invalid-feedback {
   color: #856404;
 }
 
-/*Gráficos*/
-#graficos {
-  max-width: 1200px;
-  margin: 40px auto;
-  padding: 0 20px;
-}
-
 .grafico-titulo h2 {
   align-items: center;
   color: var(--verde);
@@ -377,8 +381,9 @@ select:invalid + .invalid-feedback {
 
 .graficos-grid {
   display: grid;
-  gap: 20px;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
+  width: 57.5em;
+  place-items: center;
 }
 
 .grafico-card {
@@ -483,4 +488,77 @@ select:invalid + .invalid-feedback {
   gap: 2em;
   justify-content: space-between;
   flex-wrap: wrap;
+}
+
+/* Grafica Barra */
+.grafico-barras {
+  display: flex;
+  justify-content: space-around;
+  
+  align-items: flex-end;
+  gap: 1.5em;
+  height: 10em; /* Más compacto */
+  margin: 1.5em auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  width: 18em;
+  padding: 1em 0.5em;
+}
+.barra {
+  width: 40px;
+  min-height: 20px;
+  background: #4caf50;
+  color: #000000;
+  text-align: center;
+  border-radius: 8px 8px 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 0.95em;
+  font-weight: bold;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.07);
+  transition: height 0.4s;
+  padding-bottom: 0.5em;
+}
+.barra.gastos {
+  background: #ef4444;
+}
+.barra.deudas {
+  background: #ffc107;
+  color: #333;
+}
+.barra.ingresos {
+  background: #4caf50;
+}
+.barra-label {
+  font-size: 0.85em;
+  margin-top: 0.3em;
+  color: #000000;
+  font-weight: normal;
+}
+
+/* Grafica Pastel */
+.grafico-pastel {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  margin: 2em auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+.grafico-pastel-label {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  font-weight: bold;
+  color: #333;
+  font-size: 1.1em;
+  pointer-events: none;
 }
