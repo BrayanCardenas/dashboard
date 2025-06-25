@@ -322,27 +322,59 @@ function renderGraficoPastel({ ingresos, gastos, deudas }) {
     const deudasPorc = (deudas / total) * 100;
 
     // Ángulos para cada segmento
-    const sep = 2;
     const ingresosDeg = ingresosPorc * 3.6;
     const gastosDeg = gastosPorc * 3.6;
     const deudasDeg = deudasPorc * 3.6;
 
     pastel.style.background = `
-      conic-gradient(
-        #4caf50 0 ${ingresosDeg - sep / 2}deg,
-        #fff ${ingresosDeg - sep / 2}deg ${ingresosDeg + sep / 2}deg,
-        #ef4444 ${ingresosDeg + sep / 2}deg ${ingresosDeg + gastosDeg - sep / 2}deg,
-        #fff ${ingresosDeg + gastosDeg - sep / 2}deg ${ingresosDeg + gastosDeg + sep / 2}deg,
-        #ffc107 ${ingresosDeg + gastosDeg + sep / 2}deg 360deg
-      )
-    `;
+  conic-gradient(
+    #4caf50 0 ${ingresosDeg}deg,
+    #ef4444 ${ingresosDeg}deg ${ingresosDeg + gastosDeg}deg,
+    #ffc107 ${ingresosDeg + gastosDeg}deg 360deg
+  )
+`;
+
+    // Elimina separadores previos
+    const oldSep = pastel.querySelector('.grafico-pastel-separador');
+    if (oldSep) oldSep.remove();
+
+    // Crea separadores radiales
+    const sepDiv = document.createElement('div');
+    sepDiv.className = 'grafico-pastel-separador';
+
+    // Calcula los ángulos de separación
+    const angulos = [];
+    let currentAngle = 0;
+
+    // Categorías activas con su ángulo
+    const activos = [];
+    if (ingresos > 0) activos.push({ nombre: 'ingresos', deg: ingresosDeg });
+    if (gastos > 0) activos.push({ nombre: 'gastos', deg: gastosDeg });
+    if (deudas > 0) activos.push({ nombre: 'deudas', deg: deudasDeg });
+
+    // Calcular ángulos acumulados para cada corte
+    for (let i = 0; i < activos.length; i++) {
+      currentAngle += activos[i].deg;
+      angulos.push(currentAngle);
+    }
+
+
+    // Crea las líneas separadoras
+    angulos.forEach(angle => {
+      const linea = document.createElement('div');
+      linea.className = 'grafico-pastel-separador-linea';
+      linea.style.transform = `translate(-50%, -100%) rotate(${angle}deg)`;
+      sepDiv.appendChild(linea);
+    });
+
+    pastel.appendChild(sepDiv);
   }
 
-  pastel.innerHTML = `
+  pastel.innerHTML += `
     <div class="grafico-pastel-label">
-      <span style="color:#4caf50;">●</span> Ingresos<br>
-      <span style="color:#ef4444;">●</span> Gastos<br>
-      <span style="color:#ffc107;">●</span> Deudas
+      <span style="color:#4caf50">●</span> Ingresos<br>
+      <span style="color:#ef4444">●</span> Gastos<br>
+      <span style="color:#ffc107">●</span> Deudas
     </div>
   `;
 }
