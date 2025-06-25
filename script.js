@@ -1,14 +1,17 @@
+// Menú responsive
 function toggleMenu() {
   const menu = document.getElementById("navbarLinks");
   menu.classList.toggle("active");
 }
 
+// Actualiza los valores del dashboard principal
 function actualizarDashboard({ ingresos, gastos, deudas, balance }) {
   document.getElementById('ingresos').textContent = `$${ingresos.toFixed(2)}`;
   document.getElementById('gastos').textContent = `$${gastos.toFixed(2)}`;
   document.getElementById('deudas').textContent = `$${deudas.toFixed(2)}`;
   document.getElementById('balance').textContent = `$${balance.toFixed(2)}`;
 
+  // Cambia el color del balance según sea positivo o negativo
   const balanceCard = document.getElementById('balance-card');
   if (balance >= 0) {
     balanceCard.classList.add('positive');
@@ -19,6 +22,7 @@ function actualizarDashboard({ ingresos, gastos, deudas, balance }) {
   }
 }
 
+// Muestra mensajes de éxito o error en pantalla
 function mostrarMensaje(tipo, mensaje) {
   const contenedor = document.getElementById('flash-messages');
   const div = document.createElement('div');
@@ -33,33 +37,53 @@ function mostrarMensaje(tipo, mensaje) {
   }, 5000);
 }
 
-let transacciones = [
-  {
-    id: 1,
-    description: "Sueldo mensual",
-    amount: 2500,
-    category: "income",
-    subcategory: "Salario",
-    date: "2025-06-01"
-  },
-  {
-    id: 2,
-    description: "Pago de arriendo",
-    amount: 800,
-    category: "expense",
-    subcategory: "Vivienda",
-    date: "2025-06-03"
-  },
-  {
-    id: 3,
-    description: "Pago tarjeta crédito",
-    amount: 400,
-    category: "debt",
-    subcategory: "Créditos",
-    date: "2025-06-05"
-  }
-];
+// Opciones de subcategorías por tipo
+const subcategoriasPorTipo = {
+  income: [
+    "Salario",
+    "Ventas",
+    "Intereses",
+    "Premios",
+    "Otros"
+  ],
+  expense: [
+    "Vivienda",
+    "Alimentación",
+    "Transporte",
+    "Servicios",
+    "Educación",
+    "Salud",
+    "Entretenimiento",
+    "Otros"
+  ],
+  debt: [
+    "Créditos",
+    "Tarjeta de crédito",
+    "Préstamos personales",
+    "Hipoteca",
+    "Otros"
+  ]
+};
 
+// Actualiza las opciones del select de subcategoría según la categoría elegida
+function actualizarSubcategorias() {
+  const categoria = document.getElementById('category').value;
+  const subcatSelect = document.getElementById('subcategory');
+  subcatSelect.innerHTML = '<option value="">Seleccione una categoría</option>';
+  if (subcategoriasPorTipo[categoria]) {
+    subcategoriasPorTipo[categoria].forEach(subcat => {
+      const option = document.createElement('option');
+      option.value = subcat;
+      option.textContent = subcat;
+      subcatSelect.appendChild(option);
+    });
+  }
+}
+
+// Datos de ejemplo para las transacciones
+let transacciones = [];
+
+// Renderiza el historial de transacciones en pantalla
 function renderHistorial() {
   const contenedor = document.getElementById("contenedor-historial");
   const spanCantidad = document.getElementById("cantidad-transacciones");
@@ -83,6 +107,7 @@ function renderHistorial() {
   let lista = document.createElement("ol");
   lista.classList.add("lista-transacciones");
 
+  // Resumen por categoría
   let resumen = {
     income: {},
     expense: {},
@@ -92,7 +117,7 @@ function renderHistorial() {
   };
 
   transacciones.forEach((t) => {
-    // Crear ítem de lista
+    // Crea cada ítem de la lista de transacciones
     const li = document.createElement("li");
     li.classList.add("item-transaccion");
 
@@ -109,10 +134,12 @@ function renderHistorial() {
     const derecha = document.createElement("div");
     derecha.classList.add("text-end");
 
+    // Monto de la transacción
     const monto = document.createElement("div");
     monto.textContent = `$${t.amount.toFixed(2)}`;
     monto.classList.add("monto", t.category);
 
+    // Botón para eliminar la transacción
     const btn = document.createElement("button");
     btn.textContent = "Eliminar";
     btn.classList.add("btn-eliminar");
@@ -125,7 +152,7 @@ function renderHistorial() {
     li.appendChild(derecha);
     lista.appendChild(li);
 
-    // Acumular resumen
+    // Acumula datos para el resumen
     if (!resumen[t.category][t.subcategory]) {
       resumen[t.category][t.subcategory] = 0;
     }
@@ -138,6 +165,7 @@ function renderHistorial() {
   contenedor.appendChild(renderResumen(resumen));
 }
 
+// Renderiza el resumen de ingresos, gastos y balance por categoría 
 function renderResumen(resumen) {
   const div = document.createElement("div");
   div.classList.add("card-resumen");
@@ -175,12 +203,14 @@ function renderResumen(resumen) {
   return div;
 }
 
+// Elimina una transacción por su ID y actualiza el historial
 function eliminarTransaccion(id) {
   if (!confirm("¿Está seguro de eliminar esta transacción?")) return;
   transacciones = transacciones.filter((t) => t.id !== id);
   renderHistorial();
 }
 
+// Formatea la fecha a dd/mm/yyyy
 function formatearFecha(fecha) {
   const d = new Date(fecha);
   return `${String(d.getDate()).padStart(2, "0")}/${String(
@@ -188,6 +218,7 @@ function formatearFecha(fecha) {
   ).padStart(2, "0")}/${d.getFullYear()}`;
 }
 
+// Inicializa los gráficos con Chart.js
 function inicializarGraficos() {
   // Pie Chart - Gastos por Categoría
   new Chart(document.getElementById('expensesChart'), {
@@ -258,26 +289,94 @@ function inicializarGraficos() {
   });
 }
 
+// Maneja el envío del formulario de registro de transacciones
 function onFormSubmit(e) {
   e.preventDefault();
 
+  // Obtén los valores del formulario
   const descripcion = document.getElementById('description').value.trim();
   const monto = parseFloat(document.getElementById('amount').value);
   const tipo = document.getElementById('category').value;
+  const subcategoria = document.getElementById('subcategory').value;
+  const fecha = document.getElementById('transaction_date').value;
 
-  if (!descripcion || isNaN(monto) || monto <= 0 || !tipo) {
+  // Validación
+  if (!descripcion || isNaN(monto) || monto <= 0 || !tipo || !subcategoria) {
     mostrarMensaje('error', 'Por favor complete todos los campos obligatorios correctamente.');
     return;
   }
 
-  // Aquí puedes enviar los datos con fetch() si lo necesitas
+  // Agrega la nueva transacción al arreglo
+  transacciones.push({
+    id: Date.now(),
+    description: descripcion,
+    amount: monto,
+    category: tipo,
+    subcategory: subcategoria,
+    date: fecha || new Date().toISOString().slice(0, 10)
+  });
+
   mostrarMensaje('success', 'Transacción guardada con éxito.');
 
-  // Resetear formulario (opcional)
+  // Actualiza historial y dashboard
+  renderHistorial();
+
+  // Calcula los totales para el dashboard
+  const ingresos = transacciones.filter(t => t.category === 'income').reduce((acc, t) => acc + t.amount, 0);
+  const gastos = transacciones.filter(t => t.category === 'expense').reduce((acc, t) => acc + t.amount, 0);
+  const deudas = transacciones.filter(t => t.category === 'debt').reduce((acc, t) => acc + t.amount, 0);
+  const balance = ingresos - gastos - deudas;
+
+  actualizarDashboard({ ingresos, gastos, deudas, balance });
+
+  // Resetear formulario
   e.target.reset();
+  function onFormSubmit(e) {
+  e.preventDefault();
+
+  // Obtén los valores del formulario
+  const descripcion = document.getElementById('description').value.trim();
+  const monto = parseFloat(document.getElementById('amount').value);
+  const tipo = document.getElementById('category').value;
+  const subcategoria = document.getElementById('subcategory').value;
+  const fecha = document.getElementById('transaction_date').value;
+
+  // Validación
+  if (!descripcion || isNaN(monto) || monto <= 0 || !tipo || !subcategoria) {
+    mostrarMensaje('error', 'Por favor complete todos los campos obligatorios correctamente.');
+    return;
+  }
+
+  // Agrega la nueva transacción al arreglo
+  transacciones.push({
+    id: Date.now(),
+    description: descripcion,
+    amount: monto,
+    category: tipo,
+    subcategory: subcategoria,
+    date: fecha || new Date().toISOString().slice(0, 10)
+  });
+
+  mostrarMensaje('success', 'Transacción guardada con éxito.');
+
+  // Actualiza historial y dashboard
+  renderHistorial();
+
+  // Calcula los totales para el dashboard
+  const ingresos = transacciones.filter(t => t.category === 'income').reduce((acc, t) => acc + t.amount, 0);
+  const gastos = transacciones.filter(t => t.category === 'expense').reduce((acc, t) => acc + t.amount, 0);
+  const deudas = transacciones.filter(t => t.category === 'debt').reduce((acc, t) => acc + t.amount, 0);
+  const balance = ingresos - gastos - deudas;
+
+  actualizarDashboard({ ingresos, gastos, deudas, balance });
+
+  // Resetear formulario y subcategorías
+  e.target.reset();
+  actualizarSubcategorias();
+}
 }
 
-// Inicialización centralizada
+// Inicialización centralizada al cargar la página
 document.addEventListener('DOMContentLoaded', () => {
   // Dashboard inicial
   const datos = {
@@ -303,5 +402,14 @@ document.addEventListener('DOMContentLoaded', () => {
   if (form) {
     form.addEventListener('submit', onFormSubmit);
   }
+
+  const categoriaSelect = document.getElementById('category');
+  if (categoriaSelect) {
+    categoriaSelect.addEventListener('change', actualizarSubcategorias);
+    // Inicializa subcategorías si ya hay un valor seleccionado
+    actualizarSubcategorias();
+  }
 });
+
+
 
