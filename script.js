@@ -402,8 +402,8 @@ document.addEventListener('DOMContentLoaded', () => {
   actualizarDashboard(datos);
 
   // Mensajes de ejemplo
-  mostrarMensaje('success', '¡Operación realizada correctamente!');
-  mostrarMensaje('error', 'Ocurrió un error al guardar los datos.');
+  // mostrarMensaje('success', '¡Operación realizada correctamente!');
+  // mostrarMensaje('error', 'Ocurrió un error al guardar los datos.');
 
   // Historial
   renderHistorial();
